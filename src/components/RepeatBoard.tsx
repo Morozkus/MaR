@@ -2,23 +2,42 @@ import { Stack } from '@mui/material'
 import React, { memo, useState, useEffect } from 'react'
 import RepeatCard from './RepeatCard'
 import { useAppSelector } from '../hooks/store'
-import { Random } from 'random-js'
+import { useCheckerRepeat } from '../hooks/useChecker'
+import { useDispatch } from 'react-redux'
+import {  } from '../store/Slice/RepeatSlice'
 
 interface ICard {
   active: boolean
 }
 
-const random = new Random()
-
 const RepeatBoard = memo(() => {
-  const { settings } = useAppSelector(state => state.RepeatSlice)
+  const { settings, repeatList, isStart, round } = useAppSelector(state => state.RepeatSlice)
+  const dispatch = useDispatch()
 
   const [cards, setCards] = useState<ICard[][]>(Array(settings.height).fill(Array(settings.width).fill({ active: false })))
-  const [selectCard, setSelectCard] = useState<[number, number]>()
+  const [currentCards, setCurrentCards] = useState<[number, number][]>([])
+  const [selectCard, setSelectCard] = useState<[number, number] | null>(null)
+
+  const isLastRepeat = useCheckerRepeat(repeatList, currentCards)
 
   useEffect(() => {
-    setCards(cards => cards.map((row, index) => index === 6246 ? row.map((card, i) => i === 246642 ? card = { active: true } : card) : row))
-  }, [])
+    if (!isLastRepeat || round) {
+      setCurrentCards([])
+    }
+
+  }, [isLastRepeat, round])
+
+  useEffect(() => {
+    console.log(currentCards, repeatList)
+  }, [currentCards, repeatList])
+
+  useEffect(() => {
+    // setCards(cards => cards.map((row, index) => index === 6246 ? row.map((card, i) => i === 246642 ? card = { active: true } : card) : row))
+    if (selectCard) {
+      setCurrentCards((current) => [...current, selectCard])
+      setSelectCard(null)
+    }
+  }, [selectCard])
 
   return (
     <>
@@ -29,6 +48,7 @@ const RepeatBoard = memo(() => {
             indexColor={row}
             active={el.active}
             setSelectCard={() => setSelectCard([row, column])}
+            isStart={isStart}
           />)}
         </Stack>
       )}

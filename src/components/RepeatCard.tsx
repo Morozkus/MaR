@@ -5,21 +5,20 @@ import { useAppSelector } from '../hooks/store';
 interface IRepeatCard {
     indexColor: number,
     active: boolean,
-    setSelectCard: () => void
+    setSelectCard: () => void,
+    isStart: boolean
 }
 
 type opacityArgs = { active: boolean, isClick: boolean }
 
 const colorTheme = ['red', 'purple', 'lightblue', 'yellow']
 
-const RepeatCard = memo(({ indexColor, active, setSelectCard }: IRepeatCard) => {
-    console.log('render')
-    const { isStart } = useAppSelector(state => state.RepeatSlice)
+const RepeatCard = memo(({ indexColor, active, setSelectCard, isStart }: IRepeatCard) => {
     const [isClick, setIsClick] = useState(false)
 
     const setOpacity = ({ active, isClick }: opacityArgs) => {
         let opacity = 0.5
-        if (!isStart || active || isClick) {
+        if (isStart && (active || isClick)) {
             opacity = 1
         }
         return opacity
@@ -27,9 +26,9 @@ const RepeatCard = memo(({ indexColor, active, setSelectCard }: IRepeatCard) => 
 
     return (
         <Box
-            onClick={() => setSelectCard()}
-            onMouseDown={() => setIsClick(true)}
-            onMouseUp={() => setTimeout(() => setIsClick(false), 200)}
+            onClick={() => isStart && setSelectCard()}
+            onMouseDown={() => isStart && setIsClick(true)}
+            onMouseUp={() => isStart && setTimeout(() => setIsClick(false), 200)}
             sx={{
                 height: 50,
                 flexGrow: 1,

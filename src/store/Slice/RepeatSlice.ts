@@ -15,7 +15,7 @@ interface IRepeatSlice {
   settings: IRepeatSettings,
   repeatList: [number, number][],
   round: number
-
+  defeat: boolean
 }
 
 const initialState: IRepeatSlice = {
@@ -26,13 +26,26 @@ const initialState: IRepeatSlice = {
     difficult: getFromStorage('difficult') as TDifficult || 'easy'
   },
   repeatList: [],
-  round: 1
+  round: 1,
+  defeat: false
 }
 
 const repeatSlice = createSlice({
   name: 'repeat',
   initialState,
   reducers: {
+    setRound(state) {
+      state.round += 1
+    },
+
+    setDefeat(state, action: PayloadAction<boolean>) {
+      state.defeat = action.payload
+    },
+
+    clearRound(state) {
+      state.round = 1
+    },
+    
     setStart(state, action: PayloadAction<boolean>) {
       state.isStart = action.payload
     },
@@ -56,9 +69,13 @@ const repeatSlice = createSlice({
 
     pushToRepeatList(state) {
       state.repeatList.push(getDobbleRandomNumber(state.settings.height, state.settings.width))
+    },
+
+    clearRepeatList(state) {
+      state.repeatList = []
     }
   }
 })
 
 export default repeatSlice.reducer
-export const { setStart, setWidth, setHeight, setDifficult, pushToRepeatList } = repeatSlice.actions
+export const { setStart, setWidth, setHeight, setDifficult, pushToRepeatList, clearRepeatList, setRound, clearRound, setDefeat } = repeatSlice.actions
