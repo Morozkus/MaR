@@ -6,39 +6,45 @@ interface IRepeatCard {
     indexColor: number,
     active: boolean,
     setSelectCard: () => void,
-    isStart: boolean
+    duration: null | number
 }
-
-type opacityArgs = { active: boolean, isClick: boolean }
 
 const colorTheme = ['red', 'purple', 'lightblue', 'yellow']
 
-const RepeatCard = memo(({ indexColor, active, setSelectCard, isStart }: IRepeatCard) => {
-    const [isClick, setIsClick] = useState(false)
+const RepeatCard = ({ indexColor, active, setSelectCard, duration }: IRepeatCard) => {
+    const { round } = useAppSelector(state => state.RepeatSlice)
 
-    const setOpacity = ({ active, isClick }: opacityArgs) => {
-        let opacity = 0.5
-        if (isStart && (active || isClick)) {
-            opacity = 1
+    const [isClick, setIsClick] = useState(false)
+    const [opacity, setOpacity] = useState(0.5)
+
+    useEffect(() => {
+        if (active && duration) {
+            setTimeout(() => {
+                setOpacity(1)
+                setTimeout(() => {
+                    setOpacity(0.5)
+                }, 250)
+            }, duration)
         }
-        return opacity
-    }
+        else setOpacity(0.5)
+    }, [active, duration, round])
 
     return (
         <Box
-            onClick={() => isStart && setSelectCard()}
-            onMouseDown={() => isStart && setIsClick(true)}
-            onMouseUp={() => isStart && setTimeout(() => setIsClick(false), 200)}
+            onClick={() => setSelectCard()}
             sx={{
                 height: 50,
                 flexGrow: 1,
                 borderRadius: 1,
                 bgcolor: colorTheme[indexColor % (colorTheme.length - 1)],
-                opacity: setOpacity({ active, isClick }),
-                cursor: 'pointer'
+                opacity: opacity,
+                cursor: 'pointer',
+                ":active": {
+                    opacity: 1
+                }
             }}
         />
     );
-})
+}
 
 export default RepeatCard

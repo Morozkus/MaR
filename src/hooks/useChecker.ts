@@ -23,7 +23,7 @@ export const useCheckerRepeat = (base: [number, number][], target: [number, numb
             setLastRepeat((baseFirstValue === targetFirstValue) && (baseSecondValue === targetSecondValue))
             if (base.length === target.length && isLastRepeat) dispatch(setRound())
         }
-    }, [target, dispatch, base])
+    }, [target, dispatch, base, isLastRepeat])
 
     useEffect(() => {
         if (!isLastRepeat) {

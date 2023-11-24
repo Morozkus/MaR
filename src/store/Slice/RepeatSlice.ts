@@ -45,7 +45,7 @@ const repeatSlice = createSlice({
     clearRound(state) {
       state.round = 1
     },
-    
+
     setStart(state, action: PayloadAction<boolean>) {
       state.isStart = action.payload
     },
@@ -68,7 +68,15 @@ const repeatSlice = createSlice({
     },
 
     pushToRepeatList(state) {
-      state.repeatList.push(getDobbleRandomNumber(state.settings.height, state.settings.width))
+      if (state.isStart && state.repeatList.length) {
+        const [row, column] = state.repeatList[state.repeatList.length - 1]
+        let dobbleRandomNumber = getDobbleRandomNumber(state.settings.height, state.settings.width)
+        while (dobbleRandomNumber[0] === row && dobbleRandomNumber[1] === column) {
+          dobbleRandomNumber = getDobbleRandomNumber(state.settings.height, state.settings.width)
+        }
+        state.repeatList.push(dobbleRandomNumber)
+      } else state.isStart && state.repeatList.push(getDobbleRandomNumber(state.settings.height, state.settings.width))
+
     },
 
     clearRepeatList(state) {
