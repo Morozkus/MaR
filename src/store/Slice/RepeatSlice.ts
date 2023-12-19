@@ -67,6 +67,7 @@ const repeatSlice = createSlice({
       state.settings.difficult = action.payload
     },
 
+    // Функция для добавления новой позиции карточки, если игрок прошел уровень
     pushToRepeatList(state) {
       if (state.isStart && state.repeatList.length) {
         const [row, column] = state.repeatList[state.repeatList.length - 1]
@@ -79,6 +80,7 @@ const repeatSlice = createSlice({
 
     },
 
+    // Удаление всех позиций карточек
     clearRepeatList(state) {
       state.repeatList = []
     }

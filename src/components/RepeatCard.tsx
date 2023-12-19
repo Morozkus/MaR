@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import React, { memo, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppSelector } from '../hooks/store';
 
 interface IRepeatCard {
@@ -8,15 +8,17 @@ interface IRepeatCard {
     setSelectCard: () => void,
     duration: null | number
 }
-
+// Определение возможных цветов карточек
 const colorTheme = ['red', 'purple', 'lightblue', 'yellow']
 
 const RepeatCard = ({ indexColor, active, setSelectCard, duration }: IRepeatCard) => {
+    // Номер раунда на данный момент
     const { round } = useAppSelector(state => state.RepeatSlice)
 
-    const [isClick, setIsClick] = useState(false)
+    // Определение прозрачности карточки
     const [opacity, setOpacity] = useState(0.5)
 
+    // Подсвечивание карточки в начале раунда в соответствии с нужной задержкой
     useEffect(() => {
         if (active && duration) {
             setTimeout(() => {
@@ -29,6 +31,7 @@ const RepeatCard = ({ indexColor, active, setSelectCard, duration }: IRepeatCard
         else setOpacity(0.5)
     }, [active, duration, round])
 
+    // Определение структуры карточки
     return (
         <Box
             onClick={() => setSelectCard()}

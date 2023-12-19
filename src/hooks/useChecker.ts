@@ -3,10 +3,13 @@ import { useAppDispatch, useAppSelector } from './store'
 import { pushToRepeatList, setRound, setStart, clearRound, clearRepeatList, setDefeat } from '../store/Slice/RepeatSlice'
 
 export const useCheckerRepeat = (base: [number, number][], target: [number, number][]) => {
+    // Получение из глобального хранилища информации о нынещнем раунде, старте игры и необходимых позициях карточек
     const { round, isStart, repeatList } = useAppSelector(state => state.RepeatSlice)
+    // Состояние, отвечающее за последний шаг
     const [isLastRepeat, setLastRepeat] = useState(true)
     const dispatch = useAppDispatch()
 
+    // Добавление новой карточки в начале нового раунда
     useEffect(() => {
         if (isStart && !repeatList.length) {
             dispatch(pushToRepeatList())
@@ -15,6 +18,7 @@ export const useCheckerRepeat = (base: [number, number][], target: [number, numb
         }
     }, [isStart, dispatch, repeatList.length])
 
+    // Проверка на правильность нынешнего шага игрока и нужной позиции карточки
     useEffect(() => {
         if (base.length && target.length) {
             const len = target.length - 1
@@ -25,6 +29,7 @@ export const useCheckerRepeat = (base: [number, number][], target: [number, numb
         }
     }, [target, dispatch, base, isLastRepeat])
 
+    // Очищение полей в случае проигрыша или продолжение игры
     useEffect(() => {
         if (!isLastRepeat) {
             dispatch(setStart(false))

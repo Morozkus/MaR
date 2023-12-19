@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+// Функция, помогающая управлять кнопками меню настройках игры
 const useInput = (initialValue: string) => {
   const [value, setValue] = useState(initialValue);
 

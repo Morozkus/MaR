@@ -4,6 +4,7 @@ import useInput from '../hooks/useInput';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { TDifficult, setDifficult, setHeight, setWidth } from '../store/Slice/RepeatSlice';
 
+// Определение сложности игры [сложности не реализованы]
 const currencies = [
     {
         value: 'easy',
@@ -21,12 +22,15 @@ const currencies = [
 
 const Home = () => {
     const dispatch = useAppDispatch()
+    // Вытаскиваем поле с настройками
     const { settings } = useAppSelector(state => state.RepeatSlice)
 
+    // Определяем поля для настроек
     const width = useInput(String(settings.width))
     const height = useInput(String(settings.height))
     const difficult = useInput(settings.difficult)
 
+    // Сохранение настроек
     const saveOptions = (type: 'repeat' | 'touch') => {
         if (type === 'repeat') {
             const numberWidth = Number(width.value)
@@ -40,6 +44,7 @@ const Home = () => {
         }
     }
 
+    // Рисуем саму структуру страницы настроек
     return (
         <>
             <Container maxWidth='sm'>

@@ -2,10 +2,11 @@ import { Button, Stack } from '@mui/material'
 import React, { memo } from 'react'
 import RepeatBoard from '../components/RepeatBoard'
 import { useAppDispatch, useAppSelector } from '../hooks/store'
-import { pushToRepeatList, setStart, setDefeat } from '../store/Slice/RepeatSlice'
+import { pushToRepeatList, setStart } from '../store/Slice/RepeatSlice'
 
 const Repeat = memo(() => {
     const dispatch = useAppDispatch()
+    // Получаем поля из глобального хранилища
     const { round, isStart, defeat } = useAppSelector(state => state.RepeatSlice)
 
     const start = (): void => {

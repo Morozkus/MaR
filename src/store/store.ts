@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import RepeatSlice from './Slice/RepeatSlice'
 
-
+// Определение общего хранилища
 export const store = configureStore({
   reducer: {
     RepeatSlice
